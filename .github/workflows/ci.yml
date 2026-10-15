@@ -15,7 +15,9 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - run: npm ci
+      # Not npm ci: a lockfile written on macOS leaves out sharp's Linux-only
+      # optional packages (@emnapi/*), and npm ci rejects it for that.
+      - run: npm install --no-audit --no-fund
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test
@@ -55,7 +57,9 @@ jobs:
           distribution: temurin
           java-version: 21
       - uses: gradle/actions/setup-gradle@v4
-      - run: npm ci
+      # Not npm ci: a lockfile written on macOS leaves out sharp's Linux-only
+      # optional packages (@emnapi/*), and npm ci rejects it for that.
+      - run: npm install --no-audit --no-fund
       - run: npx expo prebuild --platform android --no-install
         working-directory: apps/${{ matrix.app }}
       - run: ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a --console=plain
