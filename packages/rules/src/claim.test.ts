@@ -31,7 +31,7 @@ describe('validateClaimDraft', () => {
 
   it('needs one to three photos', () => {
     expect(validateClaimDraft({ ...draft, photos: [] })).toEqual(['add_photo'])
-    const four = Array.from({ length: 4 }, () => draft.photos[0])
+    const four = Array.from({ length: 4 }, () => draft.photos[0]!)
     expect(validateClaimDraft({ ...draft, photos: four })).toEqual(['too_many_photos'])
   })
 
