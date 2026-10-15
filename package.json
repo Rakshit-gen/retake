@@ -12,15 +12,23 @@
     "lint": "eslint .",
     "golden": "tsx packages/quality/scripts/golden.ts",
     "eval:set": "tsx eval/make-set.ts",
-    "eval": "tsx eval/run.ts"
+    "eval": "tsx eval/run.ts",
+    "golden:kotlin": "mkdir -p packages/native/golden/build && kotlinc packages/native/android/src/main/java/com/margelo/nitro/retake/FrameMath.kt packages/native/golden/GoldenCheck.kt -include-runtime -nowarn -d packages/native/golden/build/golden.jar && java -jar packages/native/golden/build/golden.jar packages/quality/fixtures/golden.json"
   },
   "devDependencies": {
+    "@testing-library/react-native": "^14.1.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^20.19.43",
+    "@types/react": "~19.2.2",
     "babel-preset-expo": "~57.0.16",
     "expo": "~57.0.30",
     "jest": "^30.5.2",
+    "jest-expo": "~57.0.6",
+    "react": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-safe-area-context": "~5.7.0",
     "sharp": "^0.35.5",
+    "test-renderer": "^1.3.1",
     "tsx": "^4.23.15",
     "typescript": "~6.0.3"
   }

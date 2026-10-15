@@ -1,5 +1,5 @@
-// Plain TypeScript packages run under node. Packages that render React Native
-// components get their own project with the jest-expo preset as they are added.
+// Plain TypeScript packages and the server run under node. Anything that
+// renders React Native runs under the jest-expo preset.
 module.exports = {
   projects: [
     {
@@ -13,6 +13,11 @@ module.exports = {
       testMatch: ['<rootDir>/server/src/**/*.test.ts'],
       // light-my-request (fastify.inject) pulls in cookie, which ships ESM only.
       transformIgnorePatterns: ['/node_modules/(?!cookie/)'],
+    },
+    {
+      displayName: 'rn',
+      preset: 'jest-expo',
+      testMatch: ['<rootDir>/packages/{ui,capture}/src/**/*.test.{ts,tsx}', '<rootDir>/apps/*/src/**/*.test.{ts,tsx}'],
     },
   ],
 }
