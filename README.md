@@ -54,7 +54,7 @@ Needs Node 20.19.4 or newer (React Native 0.86). Tested with Node 24.
 
 ```
 npm install
-npm test               # 105 tests: rules, quality, server, UI, camera, both apps
+npm test               # 106 tests: rules, quality, server, UI, camera, both apps
 npm run typecheck
 npm run lint
 ```
@@ -108,7 +108,7 @@ Every number states what it measures and how. Update this table instead of writi
 | TS analysis time | 4.4 to 5.4 ms per 1280x720 frame | `npm run eval`, Node 24, M-series laptop; varies run to run | 2026-10-16 |
 | Kotlin analysis time | 1.8 ms per 1280x720 frame | `npm run golden:kotlin`, laptop JVM (aarch64). **Not a phone.** | 2026-10-16 |
 | Kotlin matches TS | 5 of 5 fixtures, every metric equal | `npm run golden:kotlin`, also in CI | 2026-10-16 |
-| Analysis time on a phone | not measured | no device on hand; dev builds of the rider app show the scorer's last time on screen | |
+| Analysis time on a phone | not measured | no device on hand; dev builds of the rider app show the scorer's last time and dropped frames on screen | |
 | Bad-photo rejections avoided in production | not measured | needs real traffic | |
 
 The eval set is 60 synthetic grocery packs rendered from SVG, each saved clean and in degraded copies (420 images). Real blur, sensor noise and glare are messier, so these numbers say the thresholds are sane, not how the gate does on real photos.
@@ -122,6 +122,35 @@ The eval set is 60 synthetic grocery packs rendered from SVG, each saved clean a
 - **No on-device numbers yet.** The APK builds for arm64 (debug and release locally, release in CI) but it hasn't been run on a phone for this table.
 - Android only. The native module has no iOS side.
 - Server state is in memory; photos go to `server/data`.
+
+## Testing and validation: where it stands
+
+| Area | State | Detail |
+|---|---|---|
+| Test-driven development | Partial | Test-first only for `packages/rules`: commit `70322c0` adds failing tests for the gate, return decisions and claim checks, and `cb88698` makes them pass. The luma analysis was pinned by golden fixtures before the Kotlin port was written. Everything else (server, UI, camera, both apps) had its tests written alongside or just after the code. They cover behaviour, but they did not drive the design. |
+| Production Android validation | Gap | Debug and release APKs build for arm64, and the Kotlin maths matches TypeScript exactly on a laptop JVM. Nothing has been run or timed on a physical phone: no frame-scoring times, no dropped-frame counts, no upload-queue behaviour under real network loss, no check across screen sizes and densities. |
+
+### Working test-first from here
+
+New rules or bug fixes start as a failing test in the package that owns the behaviour, committed before the fix:
+
+- decisions and thresholds: `packages/rules/src/*.test.ts` (node, fast);
+- pixel maths: add a pattern in `packages/quality/src/patterns.ts` and `GoldenCheck.kt`, run `npm run golden`, then make both sides pass `npm run golden:kotlin`;
+- screen behaviour: React Native Testing Library tests next to the screen, querying by role and label as a user would;
+- server behaviour: `fastify.inject` tests in `server/src/app.test.ts` with a fake checker.
+
+### Device validation to do
+
+What would close the gap, on at least one low-end and one mid-range Android phone:
+
+1. Install a release build (`./gradlew assembleRelease` in `apps/rider/android`, then `adb install`).
+2. Frame scoring time: the rider camera in a dev build shows the last score time and a dropped-frame count on screen. Note the typical and worst values over a minute of aiming, with the phone model and frame resolution. (A logged median and p95 would need a small change to keep a history of times.)
+3. Dropped frames: read the dropped count after the same minute; the target is zero at about 10 scores a second.
+4. Gate accuracy on real photos: shoot a small labelled set (good, dark, blurry, glare) on each phone and run it through `npm run eval` in place of the synthetic set.
+5. Upload queue: turn on airplane mode, file a claim, kill the app, turn the network back on, and confirm the claim arrives once (check the server log for one claim, plus `idempotent-replay` on any retries).
+6. Layout: check every screen at the smallest and largest display size and font size settings.
+
+Each result goes into the Measured vs Claimed table with the device and date. Until then, the "not measured" rows stay.
 
 ## Notes on the libraries underneath
 
@@ -137,6 +166,6 @@ The parts where knowing how a library works changed the design:
 
 ## Status
 
-Works: everything in the test suite (105 tests), the eval, the Kotlin golden check, Metro bundles for both apps, and arm64 debug and release APKs of the rider app built locally (release is 40 MB). CI runs typecheck, lint, tests, the golden check, and release APK builds for both apps.
+Works: everything in the test suite (106 tests), the eval, the Kotlin golden check, Metro bundles for both apps, and arm64 debug and release APKs of the rider app built locally (release is 40 MB). CI runs typecheck, lint, tests, the golden check, and release APK builds for both apps.
 
 Not done: running on a real phone and measuring there, a live Groq run, iOS, persistent server storage.
