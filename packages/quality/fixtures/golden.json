@@ -1,0 +1,67 @@
+[
+  {
+    "name": "texture",
+    "metrics": {
+      "width": 320,
+      "height": 180,
+      "meanLuma": 128.25,
+      "darkFraction": 0,
+      "brightFraction": 0,
+      "sharpness": 28448,
+      "glare": 0,
+      "dhash": "92926d6d0092926d"
+    }
+  },
+  {
+    "name": "dark_padded",
+    "metrics": {
+      "width": 320,
+      "height": 240,
+      "meanLuma": 11.5,
+      "darkFraction": 1,
+      "brightFraction": 0,
+      "sharpness": 56,
+      "glare": 0,
+      "dhash": "0000000000000000"
+    }
+  },
+  {
+    "name": "glare_spot",
+    "metrics": {
+      "width": 320,
+      "height": 180,
+      "meanLuma": 136.46640625,
+      "darkFraction": 0,
+      "brightFraction": 0.0115625,
+      "sharpness": 1384.8808392787957,
+      "glare": 0.5454545454545454,
+      "dhash": "9101259292249292"
+    }
+  },
+  {
+    "name": "odd_size",
+    "metrics": {
+      "width": 320,
+      "height": 239,
+      "meanLuma": 127.09037656903766,
+      "darkFraction": 0.005321652719665272,
+      "brightFraction": 0.0017259414225941423,
+      "sharpness": 18535.149951042855,
+      "glare": 0.018333333333333333,
+      "dhash": "21a946aa42490d21"
+    }
+  },
+  {
+    "name": "flat",
+    "metrics": {
+      "width": 320,
+      "height": 240,
+      "meanLuma": 128,
+      "darkFraction": 0,
+      "brightFraction": 0,
+      "sharpness": 0,
+      "glare": 0,
+      "dhash": "0000000000000000"
+    }
+  }
+]
