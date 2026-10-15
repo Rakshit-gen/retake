@@ -1,0 +1,22 @@
+{
+  "name": "retake",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*",
+    "server"
+  ],
+  "scripts": {
+    "test": "jest",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^20.19.43",
+    "babel-preset-expo": "~57.0.16",
+    "expo": "~57.0.30",
+    "jest": "^30.5.2",
+    "typescript": "~6.0.3"
+  }
+}
