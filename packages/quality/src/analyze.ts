@@ -1,6 +1,8 @@
 import type { FrameMetrics } from './types'
 
-export const TARGET_WIDTH = 320
+// 640 rather than 320: at 320 a mild blur mostly disappears in the downscale.
+// See the analysis width comparison in the README.
+export const TARGET_WIDTH = 640
 const DARK = 16
 const BRIGHT = 245
 const GLARE_GRID = 8
@@ -51,6 +53,7 @@ export function analyzeLuma(
     darkFraction: dark / n,
     brightFraction: bright / n,
     sharpness: laplacianVariance(px, w, h, x0, y0, x1, y1),
+    contrast: variance(px, w, x0, y0, x1, y1),
     glare: worstGlareCell(px, w, h),
     dhash: dhash(px, w, x0, y0, x1, y1),
   }
@@ -90,6 +93,23 @@ function laplacianVariance(
       const l = 4 * px[i]! - px[i - 1]! - px[i + 1]! - px[i - w]! - px[i + w]!
       s += l
       s2 += l * l
+      n++
+    }
+  }
+  if (n === 0) return 0
+  const mean = s / n
+  return s2 / n - mean * mean
+}
+
+function variance(px: Uint8Array, w: number, x0: number, y0: number, x1: number, y1: number): number {
+  let s = 0
+  let s2 = 0
+  let n = 0
+  for (let y = y0; y < y1; y++) {
+    for (let x = x0; x < x1; x++) {
+      const v = px[y * w + x]!
+      s += v
+      s2 += v * v
       n++
     }
   }

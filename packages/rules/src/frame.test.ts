@@ -7,7 +7,8 @@ const t: Thresholds = {
   maxDarkFraction: 0.5,
   maxBrightFraction: 0.4,
   maxGlare: 0.35,
-  minSharpness: 100,
+  minSharpnessRatio: 0.5,
+  minContrast: 60,
 }
 
 const good: FrameMetrics = {
@@ -17,6 +18,7 @@ const good: FrameMetrics = {
   darkFraction: 0.05,
   brightFraction: 0.02,
   sharpness: 400,
+  contrast: 400,
   glare: 0.1,
   dhash: '0123456789abcdef',
 }
@@ -47,8 +49,14 @@ describe('assessFrame', () => {
     expect(assessFrame({ ...good, brightFraction: 0.6, glare: 0.9 }, t).issues).toEqual(['too_bright'])
   })
 
-  it('flags blur', () => {
-    expect(assessFrame({ ...good, sharpness: 40 }, t).issues).toEqual(['blurry'])
+  it('flags blur relative to how much detail the scene has', () => {
+    expect(assessFrame({ ...good, sharpness: 150 }, t).issues).toEqual(['blurry'])
+    // Same edge energy, but in a low detail scene it is plenty sharp.
+    expect(assessFrame({ ...good, sharpness: 150, contrast: 200 }, t).ok).toBe(true)
+  })
+
+  it('flags a featureless centre, where blur cannot be judged', () => {
+    expect(assessFrame({ ...good, sharpness: 50, contrast: 20 }, t).issues).toEqual(['blurry'])
   })
 
   it('reports every issue, most important first', () => {

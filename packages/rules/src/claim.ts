@@ -7,6 +7,12 @@ export interface ClaimPhoto {
   uri: string
   /** Metrics of the frame the shutter fired on. */
   metrics: FrameMetrics
+  /**
+   * The user shot anyway after the gate stayed locked for a while. The gate
+   * can be wrong (it blocks about 5% of good photos in the eval), so it must
+   * never stop a claim outright. The server sees the flag.
+   */
+  override?: boolean
 }
 
 export interface ClaimDraft {
@@ -27,6 +33,6 @@ export function validateClaimDraft(d: ClaimDraft): ClaimProblem[] {
   if (!d.category) out.push('pick_category')
   if (d.photos.length === 0) out.push('add_photo')
   else if (d.photos.length > MAX_CLAIM_PHOTOS) out.push('too_many_photos')
-  else if (d.photos.some((p) => !assessFrame(p.metrics).ok)) out.push('retake_photo')
+  else if (d.photos.some((p) => !p.override && !assessFrame(p.metrics).ok)) out.push('retake_photo')
   return out
 }

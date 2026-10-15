@@ -13,8 +13,10 @@ export interface FrameMetrics {
   darkFraction: number
   /** Share of pixels at or above 245 (blown highlights). */
   brightFraction: number
-  /** Variance of the Laplacian over the centre of the frame. Higher is sharper. */
+  /** Variance of the Laplacian over the centre of the frame. Higher is sharper, but it also grows with scene detail. */
   sharpness: number
+  /** Variance of brightness over the same centre region. Dividing sharpness by this makes blur comparable across scenes. */
+  contrast: number
   /** Highest share of blown pixels inside any cell of an 8x8 grid. Catches glare spots on glossy packs. */
   glare: number
   /** 64-bit difference hash of the centre of the frame, as 16 hex characters. */

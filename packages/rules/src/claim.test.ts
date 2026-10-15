@@ -8,6 +8,7 @@ const sharp: FrameMetrics = {
   darkFraction: 0.02,
   brightFraction: 0.01,
   sharpness: 500,
+  contrast: 500,
   glare: 0.05,
   dhash: 'aaaaaaaaaaaaaaaa',
 }
@@ -38,6 +39,11 @@ describe('validateClaimDraft', () => {
   it('rejects a photo that would not pass the camera gate', () => {
     const blurry = { uri: 'file:///b.jpg', metrics: { ...sharp, sharpness: 3 } }
     expect(validateClaimDraft({ ...draft, photos: [blurry] })).toEqual(['retake_photo'])
+  })
+
+  it('lets a photo through when the user chose to shoot anyway', () => {
+    const blurry = { uri: 'file:///b.jpg', metrics: { ...sharp, sharpness: 3 }, override: true }
+    expect(validateClaimDraft({ ...draft, photos: [blurry] })).toEqual([])
   })
 
 })

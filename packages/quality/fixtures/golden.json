@@ -2,25 +2,27 @@
   {
     "name": "texture",
     "metrics": {
-      "width": 320,
-      "height": 180,
+      "width": 640,
+      "height": 360,
       "meanLuma": 128.25,
       "darkFraction": 0,
       "brightFraction": 0,
-      "sharpness": 28448,
+      "sharpness": 52868,
+      "contrast": 3263.9375,
       "glare": 0,
-      "dhash": "92926d6d0092926d"
+      "dhash": "9292242449929224"
     }
   },
   {
     "name": "dark_padded",
     "metrics": {
-      "width": 320,
-      "height": 240,
+      "width": 640,
+      "height": 480,
       "meanLuma": 11.5,
       "darkFraction": 1,
       "brightFraction": 0,
-      "sharpness": 56,
+      "sharpness": 64,
+      "contrast": 5.25,
       "glare": 0,
       "dhash": "0000000000000000"
     }
@@ -28,27 +30,29 @@
   {
     "name": "glare_spot",
     "metrics": {
-      "width": 320,
-      "height": 180,
-      "meanLuma": 136.46640625,
+      "width": 640,
+      "height": 360,
+      "meanLuma": 136.46687934027779,
       "darkFraction": 0,
-      "brightFraction": 0.0115625,
-      "sharpness": 1384.8808392787957,
-      "glare": 0.5454545454545454,
-      "dhash": "9101259292249292"
+      "brightFraction": 0.011979166666666667,
+      "sharpness": 595.4308490586016,
+      "contrast": 682.9795198631,
+      "glare": 0.5494444444444444,
+      "dhash": "9191259292249292"
     }
   },
   {
     "name": "odd_size",
     "metrics": {
-      "width": 320,
-      "height": 239,
-      "meanLuma": 127.09037656903766,
-      "darkFraction": 0.005321652719665272,
-      "brightFraction": 0.0017259414225941423,
-      "sharpness": 18535.149951042855,
-      "glare": 0.018333333333333333,
-      "dhash": "21a946aa42490d21"
+      "width": 641,
+      "height": 479,
+      "meanLuma": 127.38543963470438,
+      "darkFraction": 0.06639547419057513,
+      "brightFraction": 0.04276655408596302,
+      "sharpness": 49846.45783447144,
+      "contrast": 5459.964316439877,
+      "glare": 0.048541666666666664,
+      "dhash": "a9659a22164a4539"
     }
   },
   {
@@ -60,6 +64,7 @@
       "darkFraction": 0,
       "brightFraction": 0,
       "sharpness": 0,
+      "contrast": 0,
       "glare": 0,
       "dhash": "0000000000000000"
     }
