@@ -6,6 +6,7 @@ const mockScore = jest.fn()
 const mockCapture = jest.fn()
 const mockPermission = { hasPermission: true, canRequestPermission: true, requestPermission: jest.fn() }
 let mockOnFrame: ((f: unknown) => void) | undefined
+let mockOnDropped: (() => void) | undefined
 
 jest.mock('@retake/native', () => ({ createFrameScorer: () => ({ score: (...a: unknown[]) => mockScore(...a), lastScoreMs: 1.5 }) }))
 jest.mock('react-native-vision-camera', () => {
@@ -13,8 +14,9 @@ jest.mock('react-native-vision-camera', () => {
   return {
     Camera: (p: object) => <View testID="camera" {...p} />,
     useCameraPermission: () => mockPermission,
-    useFrameOutput: (o: { onFrame: (f: unknown) => void }) => {
+    useFrameOutput: (o: { onFrame: (f: unknown) => void; onFrameDropped: () => void }) => {
       mockOnFrame = o.onFrame
+      mockOnDropped = o.onFrameDropped
       return { kind: 'frame' }
     },
     usePhotoOutput: () => ({ capturePhotoToFile: (...a: unknown[]) => mockCapture(...a) }),
@@ -130,4 +132,14 @@ test('a failed capture shows an error and lets the user try again', async () => 
   expect(screen.getByText('Camera is closed')).toBeOnTheScreen()
   expect(onCapture).not.toHaveBeenCalled()
   expect(screen.getByTestId('shutter')).toBeEnabled()
+})
+
+test('the timing readout shows the last score time and dropped frames', async () => {
+  await render(<GuidedCamera title="Photo" onCapture={() => {}} onCancel={() => {}} showTiming />)
+  expect(screen.getByTestId('timing')).toHaveTextContent('1.5 ms · 0 dropped')
+  await act(() => {
+    mockOnDropped!()
+    mockOnDropped!()
+  })
+  expect(screen.getByTestId('timing')).toHaveTextContent('1.5 ms · 2 dropped')
 })

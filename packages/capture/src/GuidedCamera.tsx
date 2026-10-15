@@ -71,7 +71,10 @@ export function GuidedCamera({ title, onCapture, onCancel, ghostUri, claimHashes
     [lastTs, onMetrics],
   )
 
-  const frameOutput = useFrameOutput({ pixelFormat: 'yuv', onFrame })
+  // Shown with showTiming, for the on-device check in the README.
+  const [dropped, setDropped] = useState(0)
+  const onFrameDropped = useCallback(() => setDropped((n) => n + 1), [])
+  const frameOutput = useFrameOutput({ pixelFormat: 'yuv', onFrame, onFrameDropped })
   const photoOutput = usePhotoOutput({ containerFormat: 'jpeg', quality: 0.92 })
 
   const shoot = useCallback(
@@ -117,7 +120,11 @@ export function GuidedCamera({ title, onCapture, onCancel, ghostUri, claimHashes
       ) : null}
       <View style={[s.top, { top: insets.top + space(2) }]}>
         <Button kind="plain" label="Cancel" onPress={onCancel} />
-        {showTiming ? <Text style={s.timing}>{scorer.lastScoreMs.toFixed(1)} ms</Text> : null}
+        {showTiming ? (
+          <Text style={s.timing} testID="timing">
+            {scorer.lastScoreMs.toFixed(1)} ms · {dropped} dropped
+          </Text>
+        ) : null}
       </View>
       <View style={[s.bottom, { bottom: insets.bottom + space(4) }]}>
         <Banner tone={tone} testID="hint">
