@@ -14,7 +14,8 @@ let dark: Buffer
 beforeAll(async () => {
   // Seeds picked so pack A passes the gate upright and sideways (most synthetic
   // packs trip the glare check when turned to portrait, see README) and pack B
-  // is far enough from A for the hash checker to call it a different item.
+  // is far enough from A for the hash checker to call it a different item
+  // (27 bits; the cut-off is 20).
   dir = mkdtempSync(join(tmpdir(), 'retake-'))
   packA = await sharp(Buffer.from(packSvg(rng(9)).svg)).jpeg({ quality: 85 }).toBuffer()
   packB = await sharp(Buffer.from(packSvg(rng(13)).svg)).jpeg({ quality: 85 }).toBuffer()

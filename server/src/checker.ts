@@ -22,8 +22,12 @@ export type Checker = (input: CheckInput, signal: AbortSignal) => Promise<CheckO
  * Offline stand-in: compares perceptual hashes. It catches "obviously a
  * different picture" and nothing subtler, so it is for running the whole flow
  * without an API key, not a real item matcher.
+ *
+ * Taking the closest of four rotations pulls two unrelated photos down to
+ * about 28 bits apart on average (the minimum of four coin-flip distances
+ * over 64 bits), so "different" has to start well below that.
  */
-export function hashChecker(o = { matchAtMost: 12, differentAtLeast: 26 }): Checker {
+export function hashChecker(o = { matchAtMost: 12, differentAtLeast: 20 }): Checker {
   return async ({ claimHashes, attemptHashes }) => {
     let d = 64
     for (const a of attemptHashes) for (const c of claimHashes) d = Math.min(d, hammingHex(a, c))
