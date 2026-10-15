@@ -46,4 +46,9 @@ describe('validateClaimDraft', () => {
     expect(validateClaimDraft({ ...draft, photos: [blurry] })).toEqual([])
   })
 
+  it('needs an override when no frame was scored', () => {
+    const unscored = { uri: 'file:///u.jpg', metrics: null }
+    expect(validateClaimDraft({ ...draft, photos: [unscored] })).toEqual(['retake_photo'])
+    expect(validateClaimDraft({ ...draft, photos: [{ ...unscored, override: true }] })).toEqual([])
+  })
 })

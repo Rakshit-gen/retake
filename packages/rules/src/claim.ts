@@ -5,8 +5,8 @@ export type ClaimCategory = 'wrong_item' | 'expired' | 'bad_quality' | 'damaged'
 
 export interface ClaimPhoto {
   uri: string
-  /** Metrics of the frame the shutter fired on. */
-  metrics: FrameMetrics
+  /** Metrics of the frame the shutter fired on. Null if no frame was scored (scorer unavailable). */
+  metrics: FrameMetrics | null
   /**
    * The user shot anyway after the gate stayed locked for a while. The gate
    * can be wrong (it blocks about 5% of good photos in the eval), so it must
@@ -33,6 +33,6 @@ export function validateClaimDraft(d: ClaimDraft): ClaimProblem[] {
   if (!d.category) out.push('pick_category')
   if (d.photos.length === 0) out.push('add_photo')
   else if (d.photos.length > MAX_CLAIM_PHOTOS) out.push('too_many_photos')
-  else if (d.photos.some((p) => !p.override && !assessFrame(p.metrics).ok)) out.push('retake_photo')
+  else if (d.photos.some((p) => !p.override && (!p.metrics || !assessFrame(p.metrics).ok))) out.push('retake_photo')
   return out
 }
