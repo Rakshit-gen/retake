@@ -7,5 +7,12 @@ module.exports = {
       testEnvironment: 'node',
       testMatch: ['<rootDir>/packages/{rules,quality}/src/**/*.test.ts'],
     },
+    {
+      displayName: 'server',
+      testEnvironment: 'node',
+      testMatch: ['<rootDir>/server/src/**/*.test.ts'],
+      // light-my-request (fastify.inject) pulls in cookie, which ships ESM only.
+      transformIgnorePatterns: ['/node_modules/(?!cookie/)'],
+    },
   ],
 }

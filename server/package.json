@@ -1,0 +1,16 @@
+{
+  "name": "@retake/server",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@fastify/multipart": "^10.1.4",
+    "@retake/quality": "*",
+    "@retake/rules": "*",
+    "fastify": "^5.12.7",
+    "sharp": "^0.35.5"
+  }
+}

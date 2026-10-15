@@ -14,7 +14,7 @@ const H = 720
 const BASES = 60
 export const SET_DIR = join(__dirname, 'out/set')
 
-function rng(seed: number) {
+export function rng(seed: number) {
   return () => {
     seed = (seed + 0x6d2b79f5) | 0
     let t = Math.imul(seed ^ (seed >>> 15), 1 | seed)
@@ -34,7 +34,7 @@ interface Pack {
   h: number
 }
 
-function packSvg(r: () => number): { svg: string; pack: Pack } {
+export function packSvg(r: () => number): { svg: string; pack: Pack } {
   const hue = Math.floor(r() * 360)
   const bg = `hsl(${Math.floor(r() * 360)},${10 + Math.floor(r() * 20)}%,${35 + Math.floor(r() * 30)}%)`
   const pw = 480 + Math.floor(r() * 240)
