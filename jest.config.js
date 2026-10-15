@@ -17,6 +17,11 @@ module.exports = {
     {
       displayName: 'rn',
       preset: 'jest-expo',
+      // jest-expo resolves these two to their ESM builds, which jest can't load.
+      moduleNameMapper: {
+        '^immer$': '<rootDir>/node_modules/immer/dist/cjs/index.js',
+        '^react-redux$': '<rootDir>/node_modules/react-redux/dist/cjs/index.js',
+      },
       testMatch: ['<rootDir>/packages/{ui,capture}/src/**/*.test.{ts,tsx}', '<rootDir>/apps/*/src/**/*.test.{ts,tsx}'],
     },
   ],

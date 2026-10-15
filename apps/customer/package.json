@@ -1,0 +1,37 @@
+{
+  "name": "@retake/customer",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.13.0",
+    "@retake/capture": "*",
+    "@retake/native": "*",
+    "@retake/quality": "*",
+    "@retake/rules": "*",
+    "@retake/ui": "*",
+    "expo": "~57.0.30",
+    "expo-build-properties": "~57.0.22",
+    "expo-file-system": "~57.0.7",
+    "expo-image-manipulator": "~57.0.21",
+    "expo-status-bar": "~57.0.1",
+    "react": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-nitro-image": "0.15.2",
+    "react-native-nitro-modules": "0.37.1",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-vision-camera": "5.2.3",
+    "react-native-vision-camera-worklets": "5.2.3",
+    "react-native-worklets": "0.10.1",
+    "react-redux": "^9.3.0",
+    "redux-saga": "^1.5.1"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.2",
+    "typescript": "~6.0.3"
+  }
+}
