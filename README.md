@@ -119,7 +119,7 @@ The eval set is 60 synthetic grocery packs rendered from SVG, each saved clean a
 - **Portrait frames trip the glare check more.** Turned to portrait, most synthetic packs fail the glare check, because a white barcode box fills more of one 8x8 grid cell. The eval set is landscape only, so this isn't in the table above.
 - **The hash checker is a stand-in.** Synthetic packs with the same layout land 18 to 28 bits apart, so it can't tell two similar packs apart. It exists to run the whole flow offline.
 - **The Groq checker has not been run against the live API.** Its request and parsing are unit-tested against a fake `fetch`.
-- **No on-device numbers yet.** The APK builds for arm64 (debug locally, release in CI) but it hasn't been run on a phone for this table.
+- **No on-device numbers yet.** The APK builds for arm64 (debug and release locally, release in CI) but it hasn't been run on a phone for this table.
 - Android only. The native module has no iOS side.
 - Server state is in memory; photos go to `server/data`.
 
@@ -137,6 +137,6 @@ The parts where knowing how a library works changed the design:
 
 ## Status
 
-Works: everything in the test suite (105 tests), the eval, the Kotlin golden check, Metro bundles for both apps, and an arm64 debug APK of the rider app built locally. CI runs typecheck, lint, tests, the golden check, and release APK builds for both apps.
+Works: everything in the test suite (105 tests), the eval, the Kotlin golden check, Metro bundles for both apps, and arm64 debug and release APKs of the rider app built locally (release is 40 MB). CI runs typecheck, lint, tests, the golden check, and release APK builds for both apps.
 
 Not done: running on a real phone and measuring there, a live Groq run, iOS, persistent server storage.
