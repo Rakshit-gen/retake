@@ -33,10 +33,13 @@ export function useQualityGate({ claimHashes, shootAnywayAfterMs = 4000 }: Quali
   const gate = useRef(initialGate)
   const latest = useRef<FrameMetrics | null>(null)
   const claim = useRef(claimHashes)
-  claim.current = claimHashes
   const streak = useRef(0)
   const [view, setView] = useState({ ready: false, hint: null as FrameIssue | null, mismatch: false, scoring: false })
   const [canShootAnyway, setCanShootAnyway] = useState(false)
+
+  useEffect(() => {
+    claim.current = claimHashes
+  }, [claimHashes])
 
   const onMetrics = useCallback((m: FrameMetrics) => {
     latest.current = m

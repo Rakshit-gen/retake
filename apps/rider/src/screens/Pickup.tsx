@@ -44,14 +44,15 @@ export function PickupScreen({ baseUrl, onShoot }: { baseUrl: string; onShoot: (
   const retake = useRider((s) => s.retake)
   const moveOn = useRider((s) => s.moveOn)
   const close = useRider((s) => s.close)
-  const [now, setNow] = useState(Date.now())
-  const sending = active?.phase.kind === 'sending'
+  const since = active?.phase.kind === 'sending' ? active.phase.since : null
+  // The `since` of the upload that has waited too long, so a new upload starts fresh.
+  const [lateFor, setLateFor] = useState<number | null>(null)
 
   useEffect(() => {
-    if (!sending) return
-    const t = setInterval(() => setNow(Date.now()), 1000)
-    return () => clearInterval(t)
-  }, [sending])
+    if (since === null) return
+    const t = setTimeout(() => setLateFor(since), Math.max(0, since + MOVE_ON_AFTER_MS - Date.now()))
+    return () => clearTimeout(t)
+  }, [since])
 
   if (!active) return null
   const { pickup, phase } = active
@@ -59,12 +60,12 @@ export function PickupScreen({ baseUrl, onShoot }: { baseUrl: string; onShoot: (
 
   return (
     <Screen title={pickup.itemName} onBack={close}>
-      <Text variant="label">Customer's photo</Text>
+      <Text variant="label">{"Customer's photo"}</Text>
       {claimPhoto ? <Image source={{ uri: `${baseUrl}/files/${claimPhoto}` }} style={s.photo} resizeMode="contain" accessibilityLabel="Customer's photo of the item" /> : null}
 
       {phase.kind === 'shoot' ? (
         <>
-          <Text>Take the item out of any bag or packaging and photograph it from the same side as the customer's photo.</Text>
+          <Text>{"Take the item out of any bag or packaging and photograph it from the same side as the customer's photo."}</Text>
           <Button label="Photograph the item" onPress={onShoot} testID="shoot" />
         </>
       ) : null}
@@ -74,7 +75,7 @@ export function PickupScreen({ baseUrl, onShoot }: { baseUrl: string; onShoot: (
           <Banner tone="info" testID="sending">
             Checking the photo…
           </Banner>
-          {now - phase.since >= MOVE_ON_AFTER_MS ? (
+          {lateFor === phase.since ? (
             <>
               <Text variant="small">No answer yet. You can move on; this pickup will go to manual review.</Text>
               <Button kind="plain" label="Collect the item and move on" onPress={moveOn} testID="move-on" />
