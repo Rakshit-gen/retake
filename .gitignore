@@ -13,3 +13,4 @@ packages/native/android/build/
 packages/native/android/.cxx/
 server/data/
 eval/out/
+packages/native/golden/build/
